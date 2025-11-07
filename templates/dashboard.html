@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - Lipid Profile System</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <div class="container dashboard-container">
+        <header>
+            <h1>📊 Patient Health Dashboard</h1>
+            <p class="subtitle">Monitor your cardiovascular health journey</p>
+        </header>
+
+        <nav class="dashboard-nav">
+            <button class="nav-btn active" onclick="showTab('overview')">Overview</button>
+            <button class="nav-btn" onclick="showTab('history')">Assessment History</button>
+            <button class="nav-btn" onclick="showTab('lifestyle')">Lifestyle Plan</button>
+            <button class="nav-btn" onclick="showTab('notifications')">Notifications</button>
+            <button class="nav-btn" onclick="showTab('education')">Education</button>
+        </nav>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <h2>🫀 Current Health Status</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-info">
+                        <h3>Risk Level</h3>
+                        <p id="current-risk" class="stat-value">Loading...</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">💊</div>
+                    <div class="stat-info">
+                        <h3>Management Type</h3>
+                        <p id="management-type" class="stat-value">Loading...</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <h3>Adherence Rate</h3>
+                        <p id="adherence-rate" class="stat-value">Loading...</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <h3>Next Checkup</h3>
+                        <p id="next-checkup" class="stat-value">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="action-grid">
+                    <button class="action-btn" onclick="location.href='/'">
+                        🧪 New Assessment
+                    </button>
+                    <button class="action-btn" onclick="showTab('lifestyle')">
+                        🥗 View Meal Plan
+                    </button>
+                    <button class="action-btn" onclick="showTab('notifications')">
+                        🔔 Check Reminders
+                    </button>
+                    <button class="action-btn" onclick="exportReport()">
+                        📄 Export Report
+                    </button>
+                </div>
+            </div>
+
+            <div class="latest-results">
+                <h3>Latest Lipid Panel Results</h3>
+                <div id="latest-lipid-chart" class="chart-container"></div>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="history" class="tab-content">
+            <h2>📜 Assessment History</h2>
+            <div id="assessment-history" class="history-timeline">
+                <p class="loading-text">Loading assessment history...</p>
+            </div>
+        </div>
+
+        <!-- Lifestyle Tab -->
+        <div id="lifestyle" class="tab-content">
+            <h2>🥗 Personalized Lifestyle Plan</h2>
+            
+            <div class="lifestyle-sections">
+                <div class="lifestyle-card">
+                    <h3>🍽️ Daily Meal Plan</h3>
+                    <div id="meal-plan-content"></div>
+                </div>
+                
+                <div class="lifestyle-card">
+                    <h3>🏃 Exercise Routine</h3>
+                    <div id="exercise-plan-content"></div>
+                </div>
+                
+                <div class="lifestyle-card">
+                    <h3>💊 Supplements & Medications</h3>
+                    <div id="supplements-content"></div>
+                </div>
+            </div>
+
+            <div class="weekly-progress">
+                <h3>📊 Weekly Progress</h3>
+                <div id="weekly-chart" class="chart-container"></div>
+            </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div id="notifications" class="tab-content">
+            <h2>🔔 Reminders & Notifications</h2>
+            
+            <div class="notification-filters">
+                <button class="filter-btn active" onclick="filterNotifications('all')">All</button>
+                <button class="filter-btn" onclick="filterNotifications('high')">High Priority</button>
+                <button class="filter-btn" onclick="filterNotifications('medium')">Medium</button>
+                <button class="filter-btn" onclick="filterNotifications('low')">Low</button>
+            </div>
+
+            <div id="notifications-list" class="notifications-container">
+                <p class="loading-text">Loading notifications...</p>
+            </div>
+        </div>
+
+        <!-- Education Tab -->
+        <div id="education" class="tab-content">
+            <h2>📚 Heart Health Education</h2>
+            
+            <div class="education-grid">
+                <div class="education-card">
+                    <h3>🫀 Understanding Atherosclerosis</h3>
+                    <p>Learn how cholesterol buildup affects your arteries and what you can do to prevent it.</p>
+                    <button class="btn-learn">Read More</button>
+                </div>
+                
+                <div class="education-card">
+                    <h3>🥗 Heart-Healthy Diet</h3>
+                    <p>Discover foods that lower cholesterol and protect your cardiovascular system.</p>
+                    <button class="btn-learn">Read More</button>
+                </div>
+                
+                <div class="education-card">
+                    <h3>💊 About Statins</h3>
+                    <p>Understanding how statin medications work and their role in preventing heart disease.</p>
+                    <button class="btn-learn">Read More</button>
+                </div>
+                
+                <div class="education-card">
+                    <h3>🏃 Exercise Benefits</h3>
+                    <p>How physical activity improves lipid profiles and strengthens your heart.</p>
+                    <button class="btn-learn">Read More</button>
+                </div>
+                
+                <div class="education-card">
+                    <h3>⚠️ Warning Signs</h3>
+                    <p>Recognize symptoms that require immediate medical attention.</p>
+                    <button class="btn-learn">Read More</button>
+                </div>
+                
+                <div class="education-card">
+                    <h3>📊 Understanding Your Numbers</h3>
+                    <p>What do LDL, HDL, and triglyceride levels really mean for your health?</p>
+                    <button class="btn-learn">Read More</button>
+                </div>
+            </div>
+
+            <div class="daily-tip">
+                <h3>💡 Daily Health Tip</h3>
+                <p id="daily-tip-content">Loading today's tip...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Cardiovascular Health Assessment System</p>
+        <p><a href="/">← Back to Assessment</a></p>
+    </footer>
+
+    <script src="../static/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lipid Profile Risk Assessment System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🫀 Cardiovascular Risk Assessment</h1>
+            <p class="subtitle">AI-Powered Lipid Profile Analysis & Management</p>
+        </header>
+
+        <div class="disclaimer">
+            ⚠️ <strong>Medical Disclaimer:</strong> This tool provides educational information only. 
+            Always consult healthcare professionals for medical decisions.
+        </div>
+
+        <form id="lipidForm">
+            <h2>📋 Patient Information</h2>
+            
+            <div class="form-group">
+                <label>Patient ID:</label>
+                <input type="text" name="patient_id" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Age:</label>
+                    <input type="number" name="age" required min="18" max="120">
+                </div>
+                <div class="form-group">
+                    <label>Gender:</label>
+                    <select name="gender" required>
+                        <option value="">Select</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>BMI:</label>
+                    <input type="number" name="bmi" step="0.1" min="10" max="60">
+                </div>
+            </div>
+
+            <h2>🧪 Lipid Panel Results</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Total Cholesterol (mg/dL):</label>
+                    <input type="number" name="total_cholesterol" required min="100" max="400">
+                </div>
+                <div class="form-group">
+                    <label>LDL Cholesterol (mg/dL):</label>
+                    <input type="number" name="ldl" required min="30" max="300">
+                    <small>Optimal: <100</small>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>HDL Cholesterol (mg/dL):</label>
+                    <input type="number" name="hdl" required min="20" max="100">
+                    <small>Optimal: >60</small>
+                </div>
+                <div class="form-group">
+                    <label>Triglycerides (mg/dL):</label>
+                    <input type="number" name="triglycerides" required min="30" max="1000">
+                    <small>Normal: <150</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Fasting Blood Glucose (mg/dL):</label>
+                <input type="number" name="blood_glucose" required min="50" max="400">
+                <small>Normal: 70-99</small>
+            </div>
+
+            <h2>⚕️ Risk Factors</h2>
+            
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="smoking"> Current Smoker</label>
+                <label><input type="checkbox" name="family_history"> Family History of Heart Disease</label>
+                <label><input type="checkbox" name="hypertension"> High Blood Pressure</label>
+                <label><input type="checkbox" name="diabetes"> Diabetes</label>
+            </div>
+
+            <button type="submit" class="btn-primary">🔬 Analyze Risk Profile</button>
+        </form>
+
+        <div id="results" class="results hidden">
+            <h2>📊 Analysis Results</h2>
+            <div id="riskLevel" class="risk-badge"></div>
+            <div id="interpretation"></div>
+            <div id="management"></div>
+            <div id="lifestyle"></div>
+            <div id="schedule"></div>
+        </div>
+
+        <div id="adherenceTracker" class="hidden">
+            <h2>✅ Daily Adherence Tracker</h2>
+            <div id="todaysTasks"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

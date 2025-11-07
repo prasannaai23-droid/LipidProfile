@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lipid Profile Risk Assessment System</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🫀 Cardiovascular Risk Assessment</h1>
+            <p class="subtitle">AI-Powered Lipid Profile Analysis & Lifestyle Management</p>
+        </header>
+
+        <div class="disclaimer">
+            ⚠️ <strong>Medical Disclaimer:</strong> This tool provides educational information only. 
+            Always consult healthcare professionals for medical decisions. This is NOT a substitute for professional medical advice.
+        </div>
+
+        <form id="lipidForm">
+            <h2>📋 Patient Information</h2>
+            
+            <div class="form-group">
+                <label for="patient_id">Patient ID:</label>
+                <input type="text" id="patient_id" name="patient_id" required placeholder="Enter unique patient ID">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" required min="18" max="120" placeholder="Years">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="bmi">BMI (Body Mass Index):</label>
+                    <input type="number" id="bmi" name="bmi" step="0.1" min="10" max="60" placeholder="e.g., 24.5">
+                </div>
+            </div>
+
+            <h2>🧪 Lipid Panel Results (mg/dL)</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="total_cholesterol">Total Cholesterol:</label>
+                    <input type="number" id="total_cholesterol" name="total_cholesterol" required min="100" max="400" placeholder="mg/dL">
+                </div>
+                <div class="form-group">
+                    <label for="ldl">LDL Cholesterol (Bad):</label>
+                    <input type="number" id="ldl" name="ldl" required min="30" max="300" placeholder="mg/dL">
+                    <small>Optimal: &lt;100 mg/dL</small>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="hdl">HDL Cholesterol (Good):</label>
+                    <input type="number" id="hdl" name="hdl" required min="20" max="100" placeholder="mg/dL">
+                    <small>Optimal: &gt;60 mg/dL</small>
+                </div>
+                <div class="form-group">
+                    <label for="triglycerides">Triglycerides:</label>
+                    <input type="number" id="triglycerides" name="triglycerides" required min="30" max="1000" placeholder="mg/dL">
+                    <small>Normal: &lt;150 mg/dL</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="blood_glucose">Fasting Blood Glucose:</label>
+                <input type="number" id="blood_glucose" name="blood_glucose" required min="50" max="400" placeholder="mg/dL">
+                <small>Normal: 70-99 mg/dL | Pre-diabetes: 100-125 | Diabetes: ≥126</small>
+            </div>
+
+            <h2>⚕️ Medical History & Risk Factors</h2>
+            
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" name="smoking" id="smoking">
+                    <span>Current Smoker</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="family_history" id="family_history">
+                    <span>Family History of Heart Disease</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="hypertension" id="hypertension">
+                    <span>High Blood Pressure (Hypertension)</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="diabetes" id="diabetes">
+                    <span>Diabetes</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="chest_pain" id="chest_pain">
+                    <span>Recent Chest Pain/Discomfort</span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-primary">🔬 Analyze Risk Profile</button>
+        </form>
+
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Analyzing your lipid profile...</p>
+        </div>
+
+        <div id="results" class="results hidden">
+            <h2>📊 Comprehensive Risk Analysis</h2>
+            
+            <div id="riskLevel" class="risk-badge"></div>
+            
+            <div id="interpretation" class="interpretation-box"></div>
+            
+            <div id="management" class="management-section"></div>
+            
+            <div id="lifestyle" class="lifestyle-section"></div>
+            
+            <div id="schedule" class="schedule-section"></div>
+
+            <div class="action-buttons">
+                <button onclick="window.print()" class="btn-secondary">🖨️ Print Report</button>
+                <button onclick="location.href='/dashboard'" class="btn-secondary">📊 View Dashboard</button>
+                <button onclick="resetForm()" class="btn-secondary">🔄 New Assessment</button>
+            </div>
+        </div>
+
+        <div id="adherenceTracker" class="adherence-tracker hidden">
+            <h2>✅ Daily Adherence Tracker</h2>
+            <p class="tracker-subtitle">Track your daily activities to improve cardiovascular health</p>
+            <div id="todaysTasks"></div>
+            <div id="adherenceStats" class="adherence-stats"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Cardiovascular Health Assessment System | For Educational Purposes Only</p>
+        <p><strong>Emergency:</strong> If experiencing chest pain or breathing difficulty, call emergency services immediately.</p>
+    </footer>
+
+    <script src="../static/js/script.js"></script>
+</body>
+</html>
