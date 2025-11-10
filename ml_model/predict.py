@@ -1,13 +1,17 @@
-class ModelPredictor:
-    def __init__(self, model_path):
-        self.model_path = model_path
-        self.model = None
+import joblib
+import numpy as np
+import os
 
-    def load_model(self):
-        import joblib
-        self.model = joblib.load(self.model_path)
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "lipid_model.pkl")
 
-    def make_prediction(self, input_data):
-        if self.model is None:
-            raise Exception("Model is not loaded. Please load the model before making predictions.")
-        return self.model.predict(input_data)
+# Load model once globally
+_model = joblib.load(MODEL_PATH)
+
+def predict_risk(ldl, hdl, tg, total_chol):
+    try:
+        features = np.array([[ldl, hdl, tg, total_chol]], dtype=float)
+        prediction = _model.predict(features)
+        return prediction[0]  # Return label string (Low/Medium/High/Very High)
+    except Exception as e:
+        print("Prediction error:", e)
+        return "Error"
