@@ -60,3 +60,48 @@ ml-model-project
 
 - Ensure that you have all the necessary libraries installed as specified in `requirements.txt`.
 - Modify the model training and prediction logic in `src/model/train.py` and `src/model/predict.py` as needed for your specific use case.
+# 🏥 AI-Powered Lipid Profile Risk Assessment System
+
+This project is a Machine Learning + Flask-based web application designed for automated cardiovascular risk screening using lipid profile reports.
+
+The system analyzes:
+- LDL (Low-Density Lipoprotein)
+- HDL (High-Density Lipoprotein)
+- Triglycerides
+- Total Cholesterol
+- Blood Glucose & Risk Factors
+
+It classifies the patient risk into ✅ Low / ⚠ Medium / 🔴 High / 🚨 Urgent categories and generates:
+✔ Personalized lifestyle recommendations  
+✔ Medical management guidance  
+✔ Follow-up notification scheduling  
+✔ Adherence tracking with escalation alerts  
+
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|--------|-------------|
+| 🧠 ML-Based Risk Classifier | Predicts cardiovascular risk from lab values |
+| 🍎 Lifestyle Plan Generator | Daily exercise, diet, and precautions |
+| ⏰ Notification Scheduler | Sends reminders based on risk level |
+| 📊 Patient Dashboard | History, trends, adherence logs |
+| 🛑 Intelligent Escalation | Alerts clinician for poor adherence |
+| 🔐 Secure Storage | Local database tracking patients |
+
+---
+
+## 🏗️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | Python, Flask, SQLite |
+| Frontend | HTML, CSS, JavaScript |
+| AI/ML | Scikit-Learn Model |
+| Deployment | Localhost / Cloud-ready |
+
+---
+
+## 📁 Folder Structure
+

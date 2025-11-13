@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Medical Report - Lipid Profile Analysis</title>
+    <link rel="stylesheet" href="/static/css/upload.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="upload-container">
+        <!-- Navigation Header -->
+        <nav class="top-nav">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>CardioHealth AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <a href="/upload" class="active"><i class="fas fa-upload"></i> Upload Report</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="upload-wrapper">
+            <div class="upload-header">
+                <h1><i class="fas fa-file-medical"></i> Upload Lab Report</h1>
+                <p class="subtitle">Our AI will extract lipid values from your medical report automatically</p>
+            </div>
+
+            <!-- Upload Methods -->
+            <div class="upload-methods">
+                <div class="method-card active" data-method="file">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Upload File</h3>
+                    <p>PDF, JPG, PNG supported</p>
+                </div>
+                <div class="method-card" data-method="camera">
+                    <i class="fas fa-camera"></i>
+                    <h3>Take Photo</h3>
+                    <p>Use your camera</p>
+                </div>
+                <div class="method-card" data-method="manual">
+                    <i class="fas fa-keyboard"></i>
+                    <h3>Manual Entry</h3>
+                    <p>Enter values manually</p>
+                </div>
+            </div>
+
+            <!-- File Upload Area -->
+            <div class="upload-area" id="fileUploadArea">
+                <div class="drop-zone" id="dropZone">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <h3>Drag & Drop your report here</h3>
+                    <p>or click to browse files</p>
+                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" hidden>
+                    <button class="btn-browse" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-folder-open"></i> Browse Files
+                    </button>
+                    <div class="supported-formats">
+                        <small>Supported formats: PDF, JPG, PNG (Max 10MB)</small>
+                    </div>
+                </div>
+
+                <div class="file-preview hidden" id="filePreview">
+                    <div class="preview-header">
+                        <h3><i class="fas fa-file-alt"></i> Selected File</h3>
+                        <button class="btn-remove" onclick="removeFile()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="preview-content">
+                        <img id="previewImage" class="preview-img hidden" alt="Preview">
+                        <div class="file-info">
+                            <p class="file-name" id="fileName"></p>
+                            <p class="file-size" id="fileSize"></p>
+                        </div>
+                    </div>
+                    <button class="btn-upload" onclick="uploadFile()">
+                        <i class="fas fa-upload"></i> Analyze Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Camera Area -->
+            <div class="camera-area hidden" id="cameraArea">
+                <div class="camera-container">
+                    <video id="cameraVideo" autoplay playsinline></video>
+                    <canvas id="cameraCanvas" hidden></canvas>
+                    <div class="camera-controls">
+                        <button class="btn-camera" id="startCamera">
+                            <i class="fas fa-video"></i> Start Camera
+                        </button>
+                        <button class="btn-camera hidden" id="capturePhoto">
+                            <i class="fas fa-camera"></i> Capture Photo
+                        </button>
+                        <button class="btn-camera hidden" id="retakePhoto">
+                            <i class="fas fa-redo"></i> Retake
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Entry Area -->
+            <div class="manual-area hidden" id="manualArea">
+                <form class="manual-form" id="manualForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="manualTC">Total Cholesterol (mg/dL)</label>
+                            <input type="number" id="manualTC" placeholder="e.g., 200" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="manualLDL">LDL Cholesterol (mg/dL)</label>
+                            <input type="number" id="manualLDL" placeholder="e.g., 130" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="manualHDL">HDL Cholesterol (mg/dL)</label>
+                            <input type="number" id="manualHDL" placeholder="e.g., 50" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="manualTG">Triglycerides (mg/dL)</label>
+                            <input type="number" id="manualTG" placeholder="e.g., 150" step="0.1">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-check"></i> Submit Values
+                    </button>
+                </form>
+            </div>
+
+            <!-- Processing Overlay -->
+            <div class="processing-overlay hidden" id="processingOverlay">
+                <div class="processing-content">
+                    <div class="spinner-large"></div>
+                    <h3>Analyzing your report...</h3>
+                    <p id="processingStatus">Extracting lipid values using AI</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Display -->
+            <div class="results-container hidden" id="resultsContainer">
+                <div class="results-header">
+                    <h2><i class="fas fa-check-circle"></i> Analysis Complete!</h2>
+                </div>
+                <div class="extracted-values" id="extractedValues"></div>
+                <div class="results-actions">
+                    <button class="btn-primary" onclick="viewFullReport()">
+                        <i class="fas fa-file-alt"></i> View Full Report
+                    </button>
+                    <button class="btn-secondary" onclick="viewDashboard()">
+                        <i class="fas fa-chart-line"></i> Go to Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Uploads -->
+            <div class="recent-uploads">
+                <h3><i class="fas fa-history"></i> Recent Uploads</h3>
+                <div class="uploads-list" id="recentUploadsList">
+                    <p class="empty-state">No recent uploads</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/upload.js"></script>
+</body>
+</html>

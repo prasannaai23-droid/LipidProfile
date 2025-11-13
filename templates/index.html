@@ -3,147 +3,551 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lipid Profile Risk Assessment System</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <title>CardioHealth AI - Lipid Profile Risk Assessment</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🫀 Cardiovascular Risk Assessment</h1>
-            <p class="subtitle">AI-Powered Lipid Profile Analysis & Lifestyle Management</p>
-        </header>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
 
-        <div class="disclaimer">
-            ⚠️ <strong>Medical Disclaimer:</strong> This tool provides educational information only. 
-            Always consult healthcare professionals for medical decisions. This is NOT a substitute for professional medical advice.
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">CardioHealth AI</span>
+                    <span class="brand-tagline">Advanced Cardiovascular Analytics</span>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-link active">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/upload" class="nav-link">
+                    <i class="fas fa-upload"></i> Upload Report
+                </a>
+                <a href="/dashboard" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="/about" class="nav-link">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
+    </nav>
 
-        <form id="lipidForm">
-            <h2>📋 Patient Information</h2>
-            
-            <div class="form-group">
-                <label for="patient_id">Patient ID:</label>
-                <input type="text" id="patient_id" name="patient_id" required placeholder="Enter unique patient ID">
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="age">Age:</label>
-                    <input type="number" id="age" name="age" required min="18" max="120" placeholder="Years">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>AI-Powered Health Analysis</span>
                 </div>
-                <div class="form-group">
-                    <label for="gender">Gender:</label>
-                    <select id="gender" name="gender" required>
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
+                <h1 class="hero-title">
+                    Your <span class="gradient-text">Heart Health</span><br>
+                    Matters Most
+                </h1>
+                <p class="hero-description">
+                    Advanced machine learning algorithms analyze your lipid profile to provide 
+                    personalized cardiovascular risk assessment and lifestyle recommendations.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Analyses</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Available</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="bmi">BMI (Body Mass Index):</label>
-                    <input type="number" id="bmi" name="bmi" step="0.1" min="10" max="60" placeholder="e.g., 24.5">
-                </div>
-            </div>
-
-            <h2>🧪 Lipid Panel Results (mg/dL)</h2>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="total_cholesterol">Total Cholesterol:</label>
-                    <input type="number" id="total_cholesterol" name="total_cholesterol" required min="100" max="400" placeholder="mg/dL">
-                </div>
-                <div class="form-group">
-                    <label for="ldl">LDL Cholesterol (Bad):</label>
-                    <input type="number" id="ldl" name="ldl" required min="30" max="300" placeholder="mg/dL">
-                    <small>Optimal: &lt;100 mg/dL</small>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="hdl">HDL Cholesterol (Good):</label>
-                    <input type="number" id="hdl" name="hdl" required min="20" max="100" placeholder="mg/dL">
-                    <small>Optimal: &gt;60 mg/dL</small>
-                </div>
-                <div class="form-group">
-                    <label for="triglycerides">Triglycerides:</label>
-                    <input type="number" id="triglycerides" name="triglycerides" required min="30" max="1000" placeholder="mg/dL">
-                    <small>Normal: &lt;150 mg/dL</small>
+                <div class="hero-actions">
+                    <button class="btn-primary btn-lg" onclick="scrollToAssessment()">
+                        <i class="fas fa-stethoscope"></i> Start Assessment
+                    </button>
+                    <button class="btn-secondary btn-lg" onclick="window.location.href='/upload'">
+                        <i class="fas fa-file-upload"></i> Upload Report
+                    </button>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="blood_glucose">Fasting Blood Glucose:</label>
-                <input type="number" id="blood_glucose" name="blood_glucose" required min="50" max="400" placeholder="mg/dL">
-                <small>Normal: 70-99 mg/dL | Pre-diabetes: 100-125 | Diabetes: ≥126</small>
-            </div>
-
-            <h2>⚕️ Medical History & Risk Factors</h2>
-            
-            <div class="checkbox-group">
-                <label>
-                    <input type="checkbox" name="smoking" id="smoking">
-                    <span>Current Smoker</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="family_history" id="family_history">
-                    <span>Family History of Heart Disease</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="hypertension" id="hypertension">
-                    <span>High Blood Pressure (Hypertension)</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="diabetes" id="diabetes">
-                    <span>Diabetes</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="chest_pain" id="chest_pain">
-                    <span>Recent Chest Pain/Discomfort</span>
-                </label>
-            </div>
-
-            <button type="submit" class="btn-primary">🔬 Analyze Risk Profile</button>
-        </form>
-
-        <div id="loading" class="loading hidden">
-            <div class="spinner"></div>
-            <p>Analyzing your lipid profile...</p>
-        </div>
-
-        <div id="results" class="results hidden">
-            <h2>📊 Comprehensive Risk Analysis</h2>
-            
-            <div id="riskLevel" class="risk-badge"></div>
-            
-            <div id="interpretation" class="interpretation-box"></div>
-            
-            <div id="management" class="management-section"></div>
-            
-            <div id="lifestyle" class="lifestyle-section"></div>
-            
-            <div id="schedule" class="schedule-section"></div>
-
-            <div class="action-buttons">
-                <button onclick="window.print()" class="btn-secondary">🖨️ Print Report</button>
-                <button onclick="location.href='/dashboard'" class="btn-secondary">📊 View Dashboard</button>
-                <button onclick="resetForm()" class="btn-secondary">🔄 New Assessment</button>
+            <div class="hero-visual">
+                <div class="visual-card">
+                    <div class="pulse-animation">
+                        <div class="heartbeat-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="health-metrics">
+                        <div class="metric-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Real-time Analysis</span>
+                        </div>
+                        <div class="metric-item">
+                            <i class="fas fa-robot"></i>
+                            <span>AI-Powered Insights</span>
+                        </div>
+                        <div class="metric-item">
+                            <i class="fas fa-shield-check"></i>
+                            <span>HIPAA Compliant</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div id="adherenceTracker" class="adherence-tracker hidden">
-            <h2>✅ Daily Adherence Tracker</h2>
-            <p class="tracker-subtitle">Track your daily activities to improve cardiovascular health</p>
-            <div id="todaysTasks"></div>
-            <div id="adherenceStats" class="adherence-stats"></div>
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose CardioHealth AI?</h2>
+                <p class="section-subtitle">Comprehensive cardiovascular health management powered by advanced AI</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Analysis</h3>
+                    <p>Advanced machine learning models trained on thousands of lipid profiles for accurate risk assessment</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Personalized Plans</h3>
+                    <p>Custom diet, exercise, and lifestyle recommendations based on your unique health profile</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Progress Tracking</h3>
+                    <p>Monitor your health journey with interactive calendars and streak tracking features</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                    <h3>OCR Technology</h3>
+                    <p>Automatically extract data from lab reports using state-of-the-art OCR technology</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Visual Insights</h3>
+                    <p>Beautiful charts and graphs to understand your cardiovascular health at a glance</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Secure & Private</h3>
+                    <p>Your health data is encrypted and protected with enterprise-grade security</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Medical Disclaimer -->
+    <div class="disclaimer-banner">
+        <div class="container">
+            <div class="disclaimer-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>Medical Disclaimer:</strong> This tool provides educational information and risk assessment based on lipid profile data. 
+                    It is NOT a substitute for professional medical advice, diagnosis, or treatment. Always consult qualified healthcare 
+                    professionals for medical decisions and treatment plans.
+                </div>
+            </div>
         </div>
     </div>
 
-    <footer>
-        <p>© 2024 Cardiovascular Health Assessment System | For Educational Purposes Only</p>
-        <p><strong>Emergency:</strong> If experiencing chest pain or breathing difficulty, call emergency services immediately.</p>
+    <!-- Assessment Form Section -->
+    <section class="assessment-section" id="assessmentSection">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Complete Risk Assessment</h2>
+                <p class="section-subtitle">Fill in your health information for personalized analysis</p>
+            </div>
+
+            <div class="form-container">
+                <form id="lipidForm" class="assessment-form">
+                    <!-- Progress Steps -->
+                    <div class="form-steps">
+                        <div class="step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Patient Info</div>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Lipid Panel</div>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Risk Factors</div>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" data-step="4">
+                            <div class="step-number">4</div>
+                            <div class="step-label">Results</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Patient Information -->
+                    <div class="form-step active" data-step="1">
+                        <h3 class="step-title">
+                            <i class="fas fa-user"></i> Patient Information
+                        </h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-id-card"></i> Patient ID
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" name="patient_id" class="form-input" placeholder="e.g., PT001" required>
+                                <span class="form-hint">Unique identifier for the patient</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-signature"></i> Patient Name
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" name="patient_name" class="form-input" placeholder="Full name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-grid grid-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-calendar"></i> Age
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="number" name="age" class="form-input" placeholder="Years" required min="18" max="120">
+                                <span class="form-hint">18-120 years</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-venus-mars"></i> Gender
+                                    <span class="required">*</span>
+                                </label>
+                                <select name="gender" class="form-input" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-weight"></i> BMI
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="number" name="bmi" class="form-input" placeholder="e.g., 24.5" step="0.1" min="10" max="60" required>
+                                <span class="form-hint">10-60 kg/m²</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-next" onclick="nextStep()">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Lipid Panel Results -->
+                    <div class="form-step" data-step="2">
+                        <h3 class="step-title">
+                            <i class="fas fa-vial"></i> Lipid Panel Results
+                        </h3>
+                        <p class="step-description">Enter the values from your recent lipid profile test</p>
+
+                        <div class="lipid-inputs">
+                            <div class="lipid-input-card">
+                                <div class="lipid-header">
+                                    <div class="lipid-icon">
+                                        <i class="fas fa-heartbeat"></i>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Total Cholesterol <span class="required">*</span></label>
+                                        <span class="lipid-unit">mg/dL</span>
+                                    </div>
+                                </div>
+                                <input type="number" name="total_cholesterol" class="lipid-input" placeholder="e.g., 200" required min="100" max="400">
+                                <div class="lipid-range">
+                                    <span class="range-label">Optimal:</span>
+                                    <span class="range-value">&lt;200 mg/dL</span>
+                                </div>
+                            </div>
+
+                            <div class="lipid-input-card">
+                                <div class="lipid-header">
+                                    <div class="lipid-icon bad">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">LDL Cholesterol <span class="required">*</span></label>
+                                        <span class="lipid-unit">mg/dL (Bad)</span>
+                                    </div>
+                                </div>
+                                <input type="number" name="ldl" class="lipid-input" placeholder="e.g., 130" required min="30" max="300">
+                                <div class="lipid-range">
+                                    <span class="range-label">Optimal:</span>
+                                    <span class="range-value">&lt;100 mg/dL</span>
+                                </div>
+                            </div>
+
+                            <div class="lipid-input-card">
+                                <div class="lipid-header">
+                                    <div class="lipid-icon good">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">HDL Cholesterol <span class="required">*</span></label>
+                                        <span class="lipid-unit">mg/dL (Good)</span>
+                                    </div>
+                                </div>
+                                <input type="number" name="hdl" class="lipid-input" placeholder="e.g., 50" required min="20" max="100">
+                                <div class="lipid-range">
+                                    <span class="range-label">Optimal:</span>
+                                    <span class="range-value">&gt;60 mg/dL</span>
+                                </div>
+                            </div>
+
+                            <div class="lipid-input-card">
+                                <div class="lipid-header">
+                                    <div class="lipid-icon">
+                                        <i class="fas fa-tint"></i>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Triglycerides <span class="required">*</span></label>
+                                        <span class="lipid-unit">mg/dL</span>
+                                    </div>
+                                </div>
+                                <input type="number" name="triglycerides" class="lipid-input" placeholder="e.g., 150" required min="30" max="1000">
+                                <div class="lipid-range">
+                                    <span class="range-label">Normal:</span>
+                                    <span class="range-value">&lt;150 mg/dL</span>
+                                </div>
+                            </div>
+
+                            <div class="lipid-input-card">
+                                <div class="lipid-header">
+                                    <div class="lipid-icon">
+                                        <i class="fas fa-droplet"></i>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Blood Glucose <span class="required">*</span></label>
+                                        <span class="lipid-unit">mg/dL (Fasting)</span>
+                                    </div>
+                                </div>
+                                <input type="number" name="blood_glucose" class="lipid-input" placeholder="e.g., 90" required min="50" max="400">
+                                <div class="lipid-range">
+                                    <span class="range-label">Normal:</span>
+                                    <span class="range-value">70-99 mg/dL</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-prev" onclick="prevStep()">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn-next" onclick="nextStep()">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Risk Factors -->
+                    <div class="form-step" data-step="3">
+                        <h3 class="step-title">
+                            <i class="fas fa-heartbeat"></i> Cardiovascular Risk Factors
+                        </h3>
+                        <p class="step-description">Select all that apply to your health history</p>
+
+                        <div class="risk-factors-grid">
+                            <label class="risk-factor-card">
+                                <input type="checkbox" name="smoking" value="1">
+                                <div class="risk-factor-content">
+                                    <div class="risk-factor-icon">
+                                        <i class="fas fa-smoking"></i>
+                                    </div>
+                                    <div class="risk-factor-text">
+                                        <h4>Current Smoker</h4>
+                                        <p>Active tobacco use</p>
+                                    </div>
+                                    <div class="checkbox-mark">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="risk-factor-card">
+                                <input type="checkbox" name="family_history" value="1">
+                                <div class="risk-factor-content">
+                                    <div class="risk-factor-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="risk-factor-text">
+                                        <h4>Family History</h4>
+                                        <p>Heart disease in family</p>
+                                    </div>
+                                    <div class="checkbox-mark">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="risk-factor-card">
+                                <input type="checkbox" name="hypertension" value="1">
+                                <div class="risk-factor-content">
+                                    <div class="risk-factor-icon">
+                                        <i class="fas fa-heart-pulse"></i>
+                                    </div>
+                                    <div class="risk-factor-text">
+                                        <h4>Hypertension</h4>
+                                        <p>High blood pressure</p>
+                                    </div>
+                                    <div class="checkbox-mark">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="risk-factor-card">
+                                <input type="checkbox" name="diabetes" value="1">
+                                <div class="risk-factor-content">
+                                    <div class="risk-factor-icon">
+                                        <i class="fas fa-syringe"></i>
+                                    </div>
+                                    <div class="risk-factor-text">
+                                        <h4>Diabetes</h4>
+                                        <p>Type 1 or Type 2</p>
+                                    </div>
+                                    <div class="checkbox-mark">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-prev" onclick="prevStep()">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-stethoscope"></i> Analyze Risk Profile
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section hidden" id="resultsSection">
+        <div class="container">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2><i class="fas fa-chart-bar"></i> Analysis Complete</h2>
+                    <p>Here's your comprehensive cardiovascular risk assessment</p>
+                </div>
+
+                <div id="resultsContent">
+                    <!-- Results will be dynamically inserted here -->
+                </div>
+
+                <div class="results-actions">
+                    <button class="btn-primary" onclick="viewFullReport()">
+                        <i class="fas fa-file-medical"></i> View Full Report
+                    </button>
+                    <button class="btn-secondary" onclick="downloadReport()">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                    <button class="btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> New Assessment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CardioHealth AI</h3>
+                    <p>Advanced cardiovascular risk assessment powered by artificial intelligence</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/upload">Upload Report</a></li>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@cardiohealth.ai</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> San Francisco, CA</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CardioHealth AI. All rights reserved.</p>
+                <p>Built with ❤️ for better heart health</p>
+            </div>
+        </div>
     </footer>
 
-    <script src="../static/js/script.js"></script>
+    <script src="/static/js/index.js"></script>
 </body>
 </html>

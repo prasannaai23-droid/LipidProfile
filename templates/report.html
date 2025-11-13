@@ -3,90 +3,810 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lipid Profile Assessment Report</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <style>
-        @media print {
-            .no-print { display: none; }
-            body { background: white; }
-            .container { box-shadow: none; }
-        }
-    </style>
+    <title>Comprehensive Health Report - Lipid Profile Analysis</title>
+    <link rel="stylesheet" href="/static/css/report.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
-    <div class="container report-container">
-        <header class="report-header">
-            <h1>🫀 Cardiovascular Risk Assessment Report</h1>
-            <div class="report-meta">
-                <p><strong>Patient ID:</strong> <span id="report-patient-id"></span></p>
-                <p><strong>Assessment Date:</strong> <span id="report-date"></span></p>
-                <p><strong>Report Generated:</strong> <span id="generated-date"></span></p>
+    <div class="report-container">
+        <!-- Navigation -->
+        <nav class="top-nav no-print">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>CardioHealth AI</span>
             </div>
-        </header>
+            <div class="nav-actions">
+                <button onclick="window.print()" class="btn-icon">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button onclick="downloadPDF()" class="btn-icon">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+                <a href="/dashboard" class="btn-icon">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+            </div>
+        </nav>
 
-        <div class="report-disclaimer no-print">
-            ⚠️ <strong>Medical Disclaimer:</strong> This report is for informational purposes only and does not constitute medical advice. 
-            Consult with your healthcare provider for interpretation and treatment decisions.
+        <!-- Report Header -->
+        <div class="report-header">
+            <div class="header-left">
+                <h1><i class="fas fa-file-medical-alt"></i> Comprehensive Health Report</h1>
+                <div class="patient-info">
+                    <div class="info-item">
+                        <span class="label">Patient ID:</span>
+                        <span class="value" id="patientId">PT0001</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Name:</span>
+                        <span class="value" id="patientName">John Doe</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Age:</span>
+                        <span class="value" id="patientAge">45 years</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Gender:</span>
+                        <span class="value" id="patientGender">Male</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Report Date:</span>
+                        <span class="value" id="reportDate">November 13, 2025</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="risk-badge-large" id="riskBadge">
+                    <div class="risk-icon">⚠️</div>
+                    <div class="risk-text">
+                        <span class="risk-label">Risk Level</span>
+                        <span class="risk-value" id="riskLevel">Moderate Risk</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <section class="report-section">
-            <h2>📊 Risk Assessment Summary</h2>
-            <div id="risk-summary"></div>
-        </section>
+        <!-- Tabs Navigation -->
+        <div class="tabs-nav no-print">
+            <button class="tab-btn active" data-tab="overview">
+                <i class="fas fa-clipboard-list"></i> Overview
+            </button>
+            <button class="tab-btn" data-tab="diet">
+                <i class="fas fa-utensils"></i> Diet Plan
+            </button>
+            <button class="tab-btn" data-tab="fitness">
+                <i class="fas fa-dumbbell"></i> Fitness Plan
+            </button>
+            <button class="tab-btn" data-tab="calendar">
+                <i class="fas fa-calendar-check"></i> Progress Tracker
+            </button>
+            <button class="tab-btn" data-tab="medications">
+                <i class="fas fa-pills"></i> Recommendations
+            </button>
+        </div>
 
-        <section class="report-section">
-            <h2>🧪 Lipid Panel Results</h2>
-            <table class="results-table">
-                <thead>
-                    <tr>
-                        <th>Measurement</th>
-                        <th>Value</th>
-                        <th>Reference Range</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="lipid-results-table">
-                </tbody>
-            </table>
-        </section>
+        <!-- Tab Content -->
+        <div class="tabs-content">
+            <!-- Overview Tab -->
+            <div class="tab-pane active" id="overview">
+                <!-- Lipid Panel Results -->
+                <section class="report-section">
+                    <h2><i class="fas fa-vial"></i> Lipid Panel Results</h2>
+                    <div class="lipid-grid">
+                        <div class="lipid-card">
+                            <div class="lipid-header">
+                                <i class="fas fa-heartbeat"></i>
+                                <h3>Total Cholesterol</h3>
+                            </div>
+                            <div class="lipid-value" id="tcValue">220 mg/dL</div>
+                            <div class="lipid-status high">High</div>
+                            <div class="lipid-range">Optimal: &lt;200 mg/dL</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 73%;"></div>
+                            </div>
+                        </div>
 
-        <section class="report-section">
-            <h2>⚕️ Clinical Interpretation</h2>
-            <div id="clinical-interpretation"></div>
-        </section>
+                        <div class="lipid-card">
+                            <div class="lipid-header">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h3>LDL (Bad Cholesterol)</h3>
+                            </div>
+                            <div class="lipid-value" id="ldlValue">140 mg/dL</div>
+                            <div class="lipid-status high">High</div>
+                            <div class="lipid-range">Optimal: &lt;100 mg/dL</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%;"></div>
+                            </div>
+                        </div>
 
-        <section class="report-section">
-            <h2>💊 Recommended Management</h2>
-            <div id="management-recommendations"></div>
-        </section>
+                        <div class="lipid-card">
+                            <div class="lipid-header">
+                                <i class="fas fa-shield-alt"></i>
+                                <h3>HDL (Good Cholesterol)</h3>
+                            </div>
+                            <div class="lipid-value" id="hdlValue">45 mg/dL</div>
+                            <div class="lipid-status low">Low</div>
+                            <div class="lipid-range">Optimal: &gt;60 mg/dL</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%;"></div>
+                            </div>
+                        </div>
 
-        <section class="report-section">
-            <h2>🥗 Lifestyle Modification Plan</h2>
-            <div id="lifestyle-recommendations"></div>
-        </section>
+                        <div class="lipid-card">
+                            <div class="lipid-header">
+                                <i class="fas fa-tint"></i>
+                                <h3>Triglycerides</h3>
+                            </div>
+                            <div class="lipid-value" id="tgValue">180 mg/dL</div>
+                            <div class="lipid-status borderline">Borderline High</div>
+                            <div class="lipid-range">Normal: &lt;150 mg/dL</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
 
-        <section class="report-section">
-            <h2>📅 Follow-Up Schedule</h2>
-            <div id="followup-schedule"></div>
-        </section>
+                        <div class="lipid-card">
+                            <div class="lipid-header">
+                                <i class="fas fa-balance-scale"></i>
+                                <h3>TC/HDL Ratio</h3>
+                            </div>
+                            <div class="lipid-value" id="ratioValue">4.9</div>
+                            <div class="lipid-status borderline">Borderline</div>
+                            <div class="lipid-range">Optimal: &lt;4.0</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
 
-        <section class="report-section">
-            <h2>⚠️ Critical Risk Factors</h2>
-            <div id="critical-factors"></div>
-        </section>
+                        <div class="lipid-card">
+                            <div class="lipid-header">
+                                <i class="fas fa-calculator"></i>
+                                <h3>Non-HDL Cholesterol</h3>
+                            </div>
+                            <div class="lipid-value" id="nonHdlValue">175 mg/dL</div>
+                            <div class="lipid-status high">High</div>
+                            <div class="lipid-range">Optimal: &lt;130 mg/dL</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
+                <!-- Risk Assessment Chart -->
+                <section class="report-section">
+                    <h2><i class="fas fa-chart-pie"></i> Risk Assessment Breakdown</h2>
+                    <div class="chart-container">
+                        <canvas id="riskChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- Clinical Interpretation -->
+                <section class="report-section">
+                    <h2><i class="fas fa-stethoscope"></i> Clinical Interpretation</h2>
+                    <div class="interpretation-box" id="interpretationText">
+                        <p><strong>Summary:</strong> Your lipid profile indicates <span class="highlight">moderate cardiovascular risk</span>. Your LDL cholesterol and total cholesterol levels are elevated, which increases your risk of heart disease and stroke.</p>
+                        
+                        <p><strong>Key Findings:</strong></p>
+                        <ul>
+                            <li>Total cholesterol is <strong>220 mg/dL</strong> (20 mg/dL above optimal)</li>
+                            <li>LDL cholesterol is <strong>140 mg/dL</strong> (40 mg/dL above optimal)</li>
+                            <li>HDL cholesterol is <strong>45 mg/dL</strong> (15 mg/dL below optimal)</li>
+                            <li>Triglycerides are <strong>180 mg/dL</strong> (30 mg/dL above normal)</li>
+                        </ul>
+
+                        <p><strong>Recommendations:</strong> Lifestyle modifications are strongly recommended, including dietary changes, regular exercise, and weight management. Follow-up lipid panel in 3 months to assess progress.</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Diet Plan Tab -->
+            <div class="tab-pane" id="diet">
+                <section class="report-section">
+                    <h2><i class="fas fa-utensils"></i> Personalized Diet Plan</h2>
+                    <p class="section-intro">Based on your lipid profile, here's a comprehensive dietary plan to improve your cardiovascular health.</p>
+
+                    <!-- Daily Meal Plan -->
+                    <div class="meal-plan">
+                        <div class="meal-card">
+                            <div class="meal-header">
+                                <i class="fas fa-sun"></i>
+                                <h3>Breakfast (7:00 - 8:00 AM)</h3>
+                            </div>
+                            <div class="meal-content">
+                                <div class="meal-option">
+                                    <h4>Option 1: Heart-Healthy Oatmeal Bowl</h4>
+                                    <ul>
+                                        <li>1 cup steel-cut oats with almond milk</li>
+                                        <li>1 tbsp ground flaxseed (omega-3 rich)</li>
+                                        <li>½ cup fresh berries (blueberries/strawberries)</li>
+                                        <li>1 tbsp chopped walnuts</li>
+                                        <li>1 tsp cinnamon</li>
+                                    </ul>
+                                    <div class="nutrition-info">
+                                        <span><i class="fas fa-fire"></i> 320 cal</span>
+                                        <span><i class="fas fa-bread-slice"></i> 8g fiber</span>
+                                        <span><i class="fas fa-drumstick-bite"></i> 12g protein</span>
+                                    </div>
+                                </div>
+                                <div class="meal-option">
+                                    <h4>Option 2: Avocado Toast with Eggs</h4>
+                                    <ul>
+                                        <li>2 slices whole grain bread</li>
+                                        <li>½ mashed avocado</li>
+                                        <li>2 boiled eggs (whites only for lower cholesterol)</li>
+                                        <li>Cherry tomatoes</li>
+                                        <li>Fresh spinach</li>
+                                    </ul>
+                                    <div class="nutrition-info">
+                                        <span><i class="fas fa-fire"></i> 350 cal</span>
+                                        <span><i class="fas fa-bread-slice"></i> 9g fiber</span>
+                                        <span><i class="fas fa-drumstick-bite"></i> 18g protein</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="meal-card">
+                            <div class="meal-header">
+                                <i class="fas fa-apple-alt"></i>
+                                <h3>Mid-Morning Snack (10:30 AM)</h3>
+                            </div>
+                            <div class="meal-content">
+                                <ul>
+                                    <li>1 medium apple or pear</li>
+                                    <li>10-12 unsalted almonds</li>
+                                    <li>Green tea (antioxidant-rich)</li>
+                                </ul>
+                                <div class="nutrition-info">
+                                    <span><i class="fas fa-fire"></i> 150 cal</span>
+                                    <span><i class="fas fa-bread-slice"></i> 5g fiber</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="meal-card">
+                            <div class="meal-header">
+                                <i class="fas fa-cloud-sun"></i>
+                                <h3>Lunch (1:00 - 2:00 PM)</h3>
+                            </div>
+                            <div class="meal-content">
+                                <div class="meal-option">
+                                    <h4>Option 1: Grilled Salmon Bowl</h4>
+                                    <ul>
+                                        <li>4 oz grilled salmon (omega-3 rich)</li>
+                                        <li>1 cup quinoa or brown rice</li>
+                                        <li>Mixed greens salad with olive oil dressing</li>
+                                        <li>Steamed broccoli and carrots</li>
+                                        <li>Lemon wedge</li>
+                                    </ul>
+                                    <div class="nutrition-info">
+                                        <span><i class="fas fa-fire"></i> 450 cal</span>
+                                        <span><i class="fas fa-fish"></i> Omega-3 rich</span>
+                                        <span><i class="fas fa-drumstick-bite"></i> 35g protein</span>
+                                    </div>
+                                </div>
+                                <div class="meal-option">
+                                    <h4>Option 2: Mediterranean Chickpea Salad</h4>
+                                    <ul>
+                                        <li>1½ cups chickpeas</li>
+                                        <li>Cucumber, tomatoes, red onion</li>
+                                        <li>Feta cheese (2 tbsp)</li>
+                                        <li>Olive oil and lemon dressing</li>
+                                        <li>Whole wheat pita bread</li>
+                                    </ul>
+                                    <div class="nutrition-info">
+                                        <span><i class="fas fa-fire"></i> 420 cal</span>
+                                        <span><i class="fas fa-bread-slice"></i> 12g fiber</span>
+                                        <span><i class="fas fa-drumstick-bite"></i> 18g protein</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="meal-card">
+                            <div class="meal-header">
+                                <i class="fas fa-cookie"></i>
+                                <h3>Evening Snack (4:30 PM)</h3>
+                            </div>
+                            <div class="meal-content">
+                                <ul>
+                                    <li>Carrot and celery sticks with hummus (2 tbsp)</li>
+                                    <li>Or: 1 cup Greek yogurt with berries</li>
+                                    <li>Herbal tea</li>
+                                </ul>
+                                <div class="nutrition-info">
+                                    <span><i class="fas fa-fire"></i> 120 cal</span>
+                                    <span><i class="fas fa-drumstick-bite"></i> 6g protein</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="meal-card">
+                            <div class="meal-header">
+                                <i class="fas fa-moon"></i>
+                                <h3>Dinner (7:00 - 8:00 PM)</h3>
+                            </div>
+                            <div class="meal-content">
+                                <div class="meal-option">
+                                    <h4>Option 1: Grilled Chicken with Vegetables</h4>
+                                    <ul>
+                                        <li>5 oz grilled skinless chicken breast</li>
+                                        <li>Roasted Brussels sprouts and sweet potato</li>
+                                        <li>Quinoa or cauliflower rice</li>
+                                        <li>Side salad with balsamic vinaigrette</li>
+                                    </ul>
+                                    <div class="nutrition-info">
+                                        <span><i class="fas fa-fire"></i> 480 cal</span>
+                                        <span><i class="fas fa-bread-slice"></i> 10g fiber</span>
+                                        <span><i class="fas fa-drumstick-bite"></i> 40g protein</span>
+                                    </div>
+                                </div>
+                                <div class="meal-option">
+                                    <h4>Option 2: Vegetarian Lentil Curry</h4>
+                                    <ul>
+                                        <li>1 cup lentil curry with tomatoes and spinach</li>
+                                        <li>½ cup brown rice</li>
+                                        <li>Cucumber raita (yogurt sauce)</li>
+                                        <li>Steamed green beans</li>
+                                    </ul>
+                                    <div class="nutrition-info">
+                                        <span><i class="fas fa-fire"></i> 400 cal</span>
+                                        <span><i class="fas fa-bread-slice"></i> 15g fiber</span>
+                                        <span><i class="fas fa-drumstick-bite"></i> 20g protein</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Foods to Avoid -->
+                    <div class="avoid-section">
+                        <h3><i class="fas fa-ban"></i> Foods to Avoid</h3>
+                        <div class="avoid-grid">
+                            <div class="avoid-card">
+                                <i class="fas fa-hamburger"></i>
+                                <h4>Saturated Fats</h4>
+                                <p>Red meat, butter, full-fat dairy, processed meats</p>
+                            </div>
+                            <div class="avoid-card">
+                                <i class="fas fa-cookie-bite"></i>
+                                <h4>Trans Fats</h4>
+                                <p>Fried foods, baked goods, margarine, shortening</p>
+                            </div>
+                            <div class="avoid-card">
+                                <i class="fas fa-candy-cane"></i>
+                                <h4>Added Sugars</h4>
+                                <p>Sodas, candy, pastries, sweetened beverages</p>
+                            </div>
+                            <div class="avoid-card">
+                                <i class="fas fa-bacon"></i>
+                                <h4>Processed Foods</h4>
+                                <p>Fast food, packaged snacks, frozen meals</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hydration Guide -->
+                    <div class="hydration-guide">
+                        <h3><i class="fas fa-tint"></i> Daily Hydration Goals</h3>
+                        <div class="hydration-tracker">
+                            <div class="water-goal">
+                                <i class="fas fa-glass-water"></i>
+                                <div>
+                                    <h4>Water Intake</h4>
+                                    <p>8-10 glasses (2-2.5 liters) per day</p>
+                                </div>
+                            </div>
+                            <div class="water-tips">
+                                <p><strong>Tips:</strong></p>
+                                <ul>
+                                    <li>Start your day with warm lemon water</li>
+                                    <li>Drink green tea (3-4 cups daily)</li>
+                                    <li>Limit caffeine to 2 cups/day</li>
+                                    <li>Avoid sugary drinks and alcohol</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Fitness Plan Tab -->
+            <div class="tab-pane" id="fitness">
+                <section class="report-section">
+                    <h2><i class="fas fa-dumbbell"></i> Personalized Fitness Plan</h2>
+                    <p class="section-intro">A structured 4-week exercise program designed to improve cardiovascular health and lower cholesterol levels.</p>
+
+                    <!-- Weekly Exercise Schedule -->
+                    <div class="fitness-schedule">
+                        <div class="week-plan">
+                            <h3><i class="fas fa-calendar-week"></i> Weekly Exercise Schedule</h3>
+                            
+                            <div class="day-card">
+                                <div class="day-header">
+                                    <h4>Monday - Cardio Focus</h4>
+                                    <span class="duration">45 min</span>
+                                </div>
+                                <div class="exercise-list">
+                                    <div class="exercise-item">
+                                        <i class="fas fa-running"></i>
+                                        <div>
+                                            <strong>Brisk Walking/Jogging</strong>
+                                            <p>30 minutes at moderate pace (60-70% max heart rate)</p>
+                                        </div>
+                                    </div>
+                                    <div class="exercise-item">
+                                        <i class="fas fa-heartbeat"></i>
+                                        <div>
+                                            <strong>Cool Down Stretching</strong>
+                                            <p>15 minutes full body stretches</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-card">
+                                <div class="day-header">
+                                    <h4>Tuesday - Strength Training</h4>
+                                    <span class="duration">40 min</span>
+                                </div>
+                                <div class="exercise-list">
+                                    <div class="exercise-item">
+                                        <i class="fas fa-dumbbell"></i>
+                                        <div>
+                                            <strong>Upper Body Workout</strong>
+                                            <p>Push-ups (3×10), Dumbbell rows (3×12), Shoulder press (3×10)</p>
+                                        </div>
+                                    </div>
+                                    <div class="exercise-item">
+                                        <i class="fas fa-dumbbell"></i>
+                                        <div>
+                                            <strong>Core Exercises</strong>
+                                            <p>Planks (3×30 sec), Crunches (3×15), Leg raises (3×12)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-card">
+                                <div class="day-header">
+                                    <h4>Wednesday - Active Recovery</h4>
+                                    <span class="duration">30 min</span>
+                                </div>
+                                <div class="exercise-list">
+                                    <div class="exercise-item">
+                                        <i class="fas fa-spa"></i>
+                                        <div>
+                                            <strong>Yoga or Swimming</strong>
+                                            <p>Low-intensity yoga flow or leisurely swimming</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-card">
+                                <div class="day-header">
+                                    <h4>Thursday - Cardio Intervals</h4>
+                                    <span class="duration">40 min</span>
+                                </div>
+                                <div class="exercise-list">
+                                    <div class="exercise-item">
+                                        <i class="fas fa-bicycle"></i>
+                                        <div>
+                                            <strong>Cycling or Elliptical</strong>
+                                            <p>5 min warm-up, 20 min intervals (2 min moderate, 1 min intense), 5 min cool down</p>
+                                        </div>
+                                    </div>
+                                    <div class="exercise-item">
+                                        <i class="fas fa-walking"></i>
+                                        <div>
+                                            <strong>Walking</strong>
+                                            <p>10 minutes post-workout walk</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-card">
+                                <div class="day-header">
+                                    <h4>Friday - Lower Body Strength</h4>
+                                    <span class="duration">40 min</span>
+                                </div>
+                                <div class="exercise-list">
+                                    <div class="exercise-item">
+                                        <i class="fas fa-dumbbell"></i>
+                                        <div>
+                                            <strong>Leg Workout</strong>
+                                            <p>Squats (3×15), Lunges (3×12 each leg), Calf raises (3×20)</p>
+                                        </div>
+                                    </div>
+                                    <div class="exercise-item">
+                                        <i class="fas fa-dumbbell"></i>
+                                        <div>
+                                            <strong>Glutes & Hamstrings</strong>
+                                            <p>Bridges (3×15), Deadlifts (3×10), Step-ups (3×12)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-card">
+                                <div class="day-header">
+                                    <h4>Saturday - Outdoor Activity</h4>
+                                    <span class="duration">60 min</span>
+                                </div>
+                                <div class="exercise-list">
+                                    <div class="exercise-item">
+                                        <i class="fas fa-hiking"></i>
+                                        <div>
+                                            <strong>Hiking or Group Sports</strong>
+                                            <p>Nature hike, tennis, basketball, or swimming</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="day-card rest">
+                                <div class="day-header">
+                                    <h4>Sunday - Rest & Recovery</h4>
+                                    <span class="duration">Light activity</span>
+                                </div>
+                                <div class="exercise-list">
+                                    <div class="exercise-item">
+                                        <i class="fas fa-bed"></i>
+                                        <div>
+                                            <strong>Active Rest</strong>
+                                            <p>Gentle stretching, meditation, or leisurely 20-min walk</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exercise Tips -->
+                    <div class="exercise-tips">
+                        <h3><i class="fas fa-lightbulb"></i> Important Exercise Guidelines</h3>
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <i class="fas fa-heart-pulse"></i>
+                                <h4>Monitor Heart Rate</h4>
+                                <p>Stay in 60-70% of max heart rate zone for optimal fat burning and cardiovascular benefits.</p>
+                            </div>
+                            <div class="tip-card">
+                                <i class="fas fa-stopwatch"></i>
+                                <h4>Consistency is Key</h4>
+                                <p>Aim for at least 150 minutes of moderate-intensity exercise per week.</p>
+                            </div>
+                            <div class="tip-card">
+                                <i class="fas fa-water"></i>
+                                <h4>Stay Hydrated</h4>
+                                <p>Drink water before, during, and after exercise. Avoid sugary sports drinks.</p>
+                            </div>
+                            <div class="tip-card">
+                                <i class="fas fa-user-doctor"></i>
+                                <h4>Listen to Your Body</h4>
+                                <p>Stop if you experience chest pain, dizziness, or unusual shortness of breath.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Progress Tracker/Calendar Tab -->
+            <div class="tab-pane" id="calendar">
+                <section class="report-section">
+                    <h2><i class="fas fa-calendar-check"></i> Progress Tracker & Streak Calendar</h2>
+                    
+                    <!-- Stats Overview -->
+                    <div class="stats-overview">
+                        <div class="stat-card">
+                            <i class="fas fa-fire"></i>
+                            <div class="stat-content">
+                                <h3 id="currentStreak">0</h3>
+                                <p>Day Streak</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-trophy"></i>
+                            <div class="stat-content">
+                                <h3 id="totalDays">0</h3>
+                                <p>Total Active Days</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="stat-content">
+                                <h3 id="adherenceRate">0%</h3>
+                                <p>Adherence Rate</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-medal"></i>
+                            <div class="stat-content">
+                                <h3 id="badges">0</h3>
+                                <p>Badges Earned</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Calendar -->
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button class="btn-nav" onclick="previousMonth()">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <h3 id="calendarMonth">November 2025</h3>
+                            <button class="btn-nav" onclick="nextMonth()">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid">
+                            <!-- Calendar days will be generated by JavaScript -->
+                        </div>
+                        <div class="calendar-legend">
+                            <div class="legend-item">
+                                <span class="dot completed"></span> Completed All Tasks
+                            </div>
+                            <div class="legend-item">
+                                <span class="dot partial"></span> Partially Completed
+                            </div>
+                            <div class="legend-item">
+                                <span class="dot missed"></span> Missed
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Daily Checklist -->
+                    <div class="daily-checklist">
+                        <h3><i class="fas fa-tasks"></i> Today's Tasks</h3>
+                        <div class="checklist-items" id="dailyChecklist">
+                            <label class="checklist-item">
+                                <input type="checkbox" id="task_diet">
+                                <span class="checkmark"></span>
+                                <div class="task-info">
+                                    <strong>Follow Diet Plan</strong>
+                                    <p>Complete all meals according to plan</p>
+                                </div>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" id="task_exercise">
+                                <span class="checkmark"></span>
+                                <div class="task-info">
+                                    <strong>Complete Exercise</strong>
+                                    <p>Finish today's workout routine</p>
+                                </div>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" id="task_water">
+                                <span class="checkmark"></span>
+                                <div class="task-info">
+                                    <strong>Drink 8 Glasses of Water</strong>
+                                    <p>Stay hydrated throughout the day</p>
+                                </div>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" id="task_medication">
+                                <span class="checkmark"></span>
+                                <div class="task-info">
+                                    <strong>Take Supplements (if prescribed)</strong>
+                                    <p>Fish oil, Vitamin D, etc.</p>
+                                </div>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" id="task_stress">
+                                <span class="checkmark"></span>
+                                <div class="task-info">
+                                    <strong>Stress Management</strong>
+                                    <p>10 min meditation or relaxation</p>
+                                </div>
+                            </label>
+                        </div>
+                        <button class="btn-save-progress" onclick="saveProgress()">
+                            <i class="fas fa-save"></i> Save Today's Progress
+                        </button>
+                    </div>
+
+                    <!-- Achievements/Badges -->
+                    <div class="achievements">
+                        <h3><i class="fas fa-award"></i> Achievements Unlocked</h3>
+                        <div class="badges-grid" id="badgesGrid">
+                            <div class="badge locked">
+                                <i class="fas fa-lock"></i>
+                                <p>7-Day Streak</p>
+                            </div>
+                            <div class="badge locked">
+                                <i class="fas fa-lock"></i>
+                                <p>30-Day Warrior</p>
+                            </div>
+                            <div class="badge locked">
+                                <i class="fas fa-lock"></i>
+                                <p>Perfect Week</p>
+                            </div>
+                            <div class="badge locked">
+                                <i class="fas fa-lock"></i>
+                                <p>Hydration Hero</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Medications/Recommendations Tab -->
+            <div class="tab-pane" id="medications">
+                <section class="report-section">
+                    <h2><i class="fas fa-pills"></i> Medical Recommendations</h2>
+                    
+                    <div class="recommendations-grid">
+                        <div class="recommendation-card">
+                            <div class="rec-icon">
+                                <i class="fas fa-capsules"></i>
+                            </div>
+                            <h3>Supplements to Consider</h3>
+                            <ul>
+                                <li><strong>Omega-3 Fish Oil:</strong> 1000mg twice daily (EPA/DHA for heart health)</li>
+                                <li><strong>Vitamin D3:</strong> 2000 IU daily (if deficient)</li>
+                                <li><strong>Coenzyme Q10:</strong> 100mg daily (supports heart function)</li>
+                                <li><strong>Plant Sterols:</strong> 2g daily (helps lower LDL)</li>
+                            </ul>
+                            <p class="note"><strong>Note:</strong> Consult your doctor before starting any supplements.</p>
+                        </div>
+
+                        <div class="recommendation-card">
+                            <div class="rec-icon">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <h3>Follow-Up Care</h3>
+                            <ul>
+                                <li>Repeat lipid panel in <strong>3 months</strong></li>
+                                <li>Blood pressure monitoring weekly</li>
+                                <li>Annual comprehensive health checkup</li>
+                                <li>Consult cardiologist if no improvement</li>
+                            </ul>
+                        </div>
+
+                        <div class="recommendation-card">
+                            <div class="rec-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3>Lifestyle Modifications</h3>
+                            <ul>
+                                <li>Quit smoking (if applicable)</li>
+                                <li>Limit alcohol to 1 drink/day max</li>
+                                <li>Manage stress through meditation/yoga</li>
+                                <li>Maintain healthy weight (BMI 18.5-24.9)</li>
+                                <li>Get 7-9 hours of quality sleep</li>
+                            </ul>
+                        </div>
+
+                        <div class="recommendation-card">
+                            <div class="rec-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h3>Warning Signs - Seek Immediate Help</h3>
+                            <ul>
+                                <li>Chest pain or pressure</li>
+                                <li>Severe shortness of breath</li>
+                                <li>Pain radiating to arm, jaw, or back</li>
+                                <li>Sudden severe headache</li>
+                                <li>Loss of consciousness or dizziness</li>
+                            </ul>
+                            <p class="emergency"><strong>Emergency:</strong> Call 911 or local emergency services</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Report Footer -->
         <div class="report-footer">
-            <p><strong>Generated by:</strong> AI-Powered Lipid Profile Risk Assessment System</p>
-            <p><strong>Emergency Contact:</strong> If experiencing chest pain, shortness of breath, or other severe symptoms, call emergency services immediately.</p>
-        </div>
-
-        <div class="action-buttons no-print">
-            <button onclick="window.print()" class="btn-primary">🖨️ Print Report</button>
-            <button onclick="downloadPDF()" class="btn-secondary">📄 Download PDF</button>
-            <button onclick="window.close()" class="btn-secondary">✖️ Close</button>
+            <p><strong>Disclaimer:</strong> This report is for informational purposes only and does not constitute medical advice. Always consult with qualified healthcare professionals before making health decisions.</p>
+            <p>Generated by CardioHealth AI System | Report ID: <span id="reportId">RPT-2025-11-13-001</span></p>
         </div>
     </div>
 
-    <script src="../static/js/report.js"></script>
+    <script src="/static/js/report.js"></script>
 </body>
 </html>

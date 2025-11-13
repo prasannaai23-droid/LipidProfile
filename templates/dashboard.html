@@ -3,191 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Dashboard - Lipid Profile System</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Lipid Profile Dashboard - Risk Assessment</title>
+    <!-- Force reload with version parameter -->
+    <link rel="stylesheet" href="/static/css/dashboard.css?v=2.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container dashboard-container">
-        <header>
-            <h1>📊 Patient Health Dashboard</h1>
-            <p class="subtitle">Monitor your cardiovascular health journey</p>
-        </header>
-
-        <nav class="dashboard-nav">
-            <button class="nav-btn active" onclick="showTab('overview')">Overview</button>
-            <button class="nav-btn" onclick="showTab('history')">Assessment History</button>
-            <button class="nav-btn" onclick="showTab('lifestyle')">Lifestyle Plan</button>
-            <button class="nav-btn" onclick="showTab('notifications')">Notifications</button>
-            <button class="nav-btn" onclick="showTab('education')">Education</button>
+    <!-- Navigation Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-heartbeat"></i>
+            <h2>CardioHealth</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="#overview" class="nav-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Overview</span>
+            </a>
+            <a href="#reports" class="nav-item">
+                <i class="fas fa-file-medical"></i>
+                <span>Reports</span>
+            </a>
+            <a href="#trends" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Trends</span>
+            </a>
+            <a href="#chatbot" class="nav-item">
+                <i class="fas fa-robot"></i>
+                <span>AI Assistant</span>
+            </a>
+            <a href="#recommendations" class="nav-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Recommendations</span>
+            </a>
+            <a href="#settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
         </nav>
-
-        <!-- Overview Tab -->
-        <div id="overview" class="tab-content active">
-            <h2>🫀 Current Health Status</h2>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">📈</div>
-                    <div class="stat-info">
-                        <h3>Risk Level</h3>
-                        <p id="current-risk" class="stat-value">Loading...</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">💊</div>
-                    <div class="stat-info">
-                        <h3>Management Type</h3>
-                        <p id="management-type" class="stat-value">Loading...</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-info">
-                        <h3>Adherence Rate</h3>
-                        <p id="adherence-rate" class="stat-value">Loading...</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">📅</div>
-                    <div class="stat-info">
-                        <h3>Next Checkup</h3>
-                        <p id="next-checkup" class="stat-value">Loading...</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="quick-actions">
-                <h3>Quick Actions</h3>
-                <div class="action-grid">
-                    <button class="action-btn" onclick="location.href='/'">
-                        🧪 New Assessment
-                    </button>
-                    <button class="action-btn" onclick="showTab('lifestyle')">
-                        🥗 View Meal Plan
-                    </button>
-                    <button class="action-btn" onclick="showTab('notifications')">
-                        🔔 Check Reminders
-                    </button>
-                    <button class="action-btn" onclick="exportReport()">
-                        📄 Export Report
-                    </button>
-                </div>
-            </div>
-
-            <div class="latest-results">
-                <h3>Latest Lipid Panel Results</h3>
-                <div id="latest-lipid-chart" class="chart-container"></div>
-            </div>
-        </div>
-
-        <!-- History Tab -->
-        <div id="history" class="tab-content">
-            <h2>📜 Assessment History</h2>
-            <div id="assessment-history" class="history-timeline">
-                <p class="loading-text">Loading assessment history...</p>
-            </div>
-        </div>
-
-        <!-- Lifestyle Tab -->
-        <div id="lifestyle" class="tab-content">
-            <h2>🥗 Personalized Lifestyle Plan</h2>
-            
-            <div class="lifestyle-sections">
-                <div class="lifestyle-card">
-                    <h3>🍽️ Daily Meal Plan</h3>
-                    <div id="meal-plan-content"></div>
-                </div>
-                
-                <div class="lifestyle-card">
-                    <h3>🏃 Exercise Routine</h3>
-                    <div id="exercise-plan-content"></div>
-                </div>
-                
-                <div class="lifestyle-card">
-                    <h3>💊 Supplements & Medications</h3>
-                    <div id="supplements-content"></div>
-                </div>
-            </div>
-
-            <div class="weekly-progress">
-                <h3>📊 Weekly Progress</h3>
-                <div id="weekly-chart" class="chart-container"></div>
-            </div>
-        </div>
-
-        <!-- Notifications Tab -->
-        <div id="notifications" class="tab-content">
-            <h2>🔔 Reminders & Notifications</h2>
-            
-            <div class="notification-filters">
-                <button class="filter-btn active" onclick="filterNotifications('all')">All</button>
-                <button class="filter-btn" onclick="filterNotifications('high')">High Priority</button>
-                <button class="filter-btn" onclick="filterNotifications('medium')">Medium</button>
-                <button class="filter-btn" onclick="filterNotifications('low')">Low</button>
-            </div>
-
-            <div id="notifications-list" class="notifications-container">
-                <p class="loading-text">Loading notifications...</p>
-            </div>
-        </div>
-
-        <!-- Education Tab -->
-        <div id="education" class="tab-content">
-            <h2>📚 Heart Health Education</h2>
-            
-            <div class="education-grid">
-                <div class="education-card">
-                    <h3>🫀 Understanding Atherosclerosis</h3>
-                    <p>Learn how cholesterol buildup affects your arteries and what you can do to prevent it.</p>
-                    <button class="btn-learn">Read More</button>
-                </div>
-                
-                <div class="education-card">
-                    <h3>🥗 Heart-Healthy Diet</h3>
-                    <p>Discover foods that lower cholesterol and protect your cardiovascular system.</p>
-                    <button class="btn-learn">Read More</button>
-                </div>
-                
-                <div class="education-card">
-                    <h3>💊 About Statins</h3>
-                    <p>Understanding how statin medications work and their role in preventing heart disease.</p>
-                    <button class="btn-learn">Read More</button>
-                </div>
-                
-                <div class="education-card">
-                    <h3>🏃 Exercise Benefits</h3>
-                    <p>How physical activity improves lipid profiles and strengthens your heart.</p>
-                    <button class="btn-learn">Read More</button>
-                </div>
-                
-                <div class="education-card">
-                    <h3>⚠️ Warning Signs</h3>
-                    <p>Recognize symptoms that require immediate medical attention.</p>
-                    <button class="btn-learn">Read More</button>
-                </div>
-                
-                <div class="education-card">
-                    <h3>📊 Understanding Your Numbers</h3>
-                    <p>What do LDL, HDL, and triglyceride levels really mean for your health?</p>
-                    <button class="btn-learn">Read More</button>
-                </div>
-            </div>
-
-            <div class="daily-tip">
-                <h3>💡 Daily Health Tip</h3>
-                <p id="daily-tip-content">Loading today's tip...</p>
-            </div>
+        <div class="sidebar-footer">
+            <a href="/" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
         </div>
     </div>
 
-    <footer>
-        <p>© 2024 Cardiovascular Health Assessment System</p>
-        <p><a href="/">← Back to Assessment</a></p>
-    </footer>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search reports, patients..." id="searchInput">
+            </div>
+            <div class="user-info">
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-profile">
+                    <img src="/static/images/user-avatar.png" alt="User" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath fill=%22%23666%22 d=%22M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z%22/%3E%3C/svg%3E'">
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Patient</span>
+                        <span class="user-role">ID: <span id="patientId">---</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <script src="../static/js/dashboard.js"></script>
+        <!-- Dashboard Content -->
+        <div class="dashboard-container">
+            <!-- Overview Section -->
+            <section id="overview" class="dashboard-section">
+                <div class="section-header">
+                    <h1>Health Overview</h1>
+                    <div class="date-filter">
+                        <select id="dateFilter">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 3 months</option>
+                            <option value="365">Last year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Key Metrics Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card risk-card">
+                        <div class="metric-icon risk-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3>Current Risk Level</h3>
+                            <div class="metric-value" id="riskLevel">---</div>
+                            <div class="metric-change" id="riskChange">
+                                <i class="fas fa-arrow-down"></i> Improved
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card cholesterol-card">
+                        <div class="metric-icon cholesterol-icon">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3>Total Cholesterol</h3>
+                            <div class="metric-value" id="totalCholesterol">--- mg/dL</div>
+                            <div class="metric-range">Normal: 125-200 mg/dL</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card ldl-card">
+                        <div class="metric-icon ldl-icon">
+                            <i class="fas fa-virus"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3>LDL (Bad Cholesterol)</h3>
+                            <div class="metric-value" id="ldlValue">--- mg/dL</div>
+                            <div class="metric-range">Optimal: <100 mg/dL</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card hdl-card">
+                        <div class="metric-icon hdl-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3>HDL (Good Cholesterol)</h3>
+                            <div class="metric-value" id="hdlValue">--- mg/dL</div>
+                            <div class="metric-range">Optimal: >60 mg/dL</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card triglycerides-card">
+                        <div class="metric-icon tg-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3>Triglycerides</h3>
+                            <div class="metric-value" id="tgValue">--- mg/dL</div>
+                            <div class="metric-range">Normal: <150 mg/dL</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card ratio-card">
+                        <div class="metric-icon ratio-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3>TC/HDL Ratio</h3>
+                            <div class="metric-value" id="ratioValue">---</div>
+                            <div class="metric-range">Optimal: <3.5</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Lipid Profile Distribution</h3>
+                            <div class="chart-actions">
+                                <button class="btn-icon" title="Download"><i class="fas fa-download"></i></button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="lipidRadarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Risk Probability</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="riskPieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trend Chart -->
+                <div class="chart-card full-width">
+                    <div class="chart-header">
+                        <h3>Cholesterol Trends Over Time</h3>
+                        <div class="chart-legend">
+                            <span class="legend-item"><span class="legend-dot total"></span> Total</span>
+                            <span class="legend-item"><span class="legend-dot ldl"></span> LDL</span>
+                            <span class="legend-item"><span class="legend-dot hdl"></span> HDL</span>
+                            <span class="legend-item"><span class="legend-dot tg"></span> Triglycerides</span>
+                        </div>
+                    </div>
+                    <div class="chart-container large">
+                        <canvas id="trendLineChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="dashboard-section hidden">
+                <div class="section-header">
+                    <h1>Medical Reports</h1>
+                    <button class="btn-primary" onclick="window.location.href='/upload'">
+                        <i class="fas fa-upload"></i> Upload New Report
+                    </button>
+                </div>
+
+                <div class="reports-list" id="reportsList">
+                    <!-- Reports will be loaded here -->
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No reports uploaded yet</p>
+                        <button class="btn-primary" onclick="window.location.href='/upload'">Upload Your First Report</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trends Section -->
+            <section id="trends" class="dashboard-section hidden">
+                <div class="section-header">
+                    <h1>Health Trends Analysis</h1>
+                </div>
+
+                <div class="trends-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Cholesterol Trend</h3>
+                        </div>
+                        <div id="cholesterolTrendChart"></div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Risk Level Progress</h3>
+                        </div>
+                        <div id="riskProgressChart"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chatbot Section -->
+            <section id="chatbot" class="dashboard-section hidden">
+                <div class="section-header">
+                    <h1>AI Health Assistant</h1>
+                </div>
+
+                <div class="chatbot-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-message bot">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <p>Hello! I'm your AI health assistant. I can help you understand your lipid profile results, provide lifestyle recommendations, and answer questions about cardiovascular health. How can I assist you today?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-questions">
+                        <h4>Quick Questions:</h4>
+                        <div class="quick-question-buttons">
+                            <button class="quick-question-btn" onclick="askQuestion('What is my current risk level?')">
+                                What is my risk level?
+                            </button>
+                            <button class="quick-question-btn" onclick="askQuestion('How can I lower my cholesterol?')">
+                                How to lower cholesterol?
+                            </button>
+                            <button class="quick-question-btn" onclick="askQuestion('What foods should I avoid?')">
+                                Foods to avoid?
+                            </button>
+                            <button class="quick-question-btn" onclick="askQuestion('Explain my lipid profile')">
+                                Explain my results
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" placeholder="Ask me anything about your health..." 
+                               onkeypress="if(event.key === 'Enter') sendMessage()">
+                        <button class="btn-send" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recommendations Section -->
+            <section id="recommendations" class="dashboard-section hidden">
+                <div class="section-header">
+                    <h1>Personalized Recommendations</h1>
+                </div>
+
+                <div class="recommendations-grid" id="recommendationsGrid">
+                    <!-- Recommendations will be loaded here -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Floating Chat Button -->
+    <button class="floating-chat-btn" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <script src="/static/js/dashboard.js?v=2.0"></script>
 </body>
 </html>
